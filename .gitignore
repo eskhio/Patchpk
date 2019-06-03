@@ -1,0 +1,11 @@
+# ignore all logs
+# Ignore everything
+*
+# But not these files...
+!.gitignore
+!rPatch
+!*.sh
+!README.md
+# etc...
+# ...even if they are in subdirectories
+!*/
