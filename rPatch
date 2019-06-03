@@ -1,0 +1,44 @@
+#!/bin/bash
+# Reverse env is here
+APPS_PATH="$(dirname $0)/apps"
+APKS_PATH="$(dirname $0)/apks"
+TOOLS_PATH="$(dirname $0)/tools"
+SH_TOOLS="${TOOLS_PATH}/sh"
+JS_TOOLS="${TOOLS_PATH}/js"
+source ${SH_TOOLS}/utils.sh
+clear
+if [[ $# -eq 0 ]]; then displayUsage; fi;
+echo "APK reversing + bypass injection - $(date)"
+echo -e "###################################"
+# App/tools config
+source ${SH_TOOLS}/conf.sh
+# Load APK
+source ${SH_TOOLS}/loader.sh
+# Decompile, recompile, sign APK
+source ${SH_TOOLS}/decrec.sh
+# SMALI Code injecting
+source ${SH_TOOLS}/injecter.sh
+# App info
+printOK "- App name: ${APP_NAME}"
+printOK "- APK to be shipped: ${PATCHED_APK}"
+echo -e "##################################\n\n\n"
+# Setting up a new env (mkdir+cp apk from source to reverse env)
+setupAppEnv
+# Get apk from chosen source
+dlAPK
+# Decompile source's APK
+if [ ! -z "$DEC" ]; then decToSmali; fi
+# APK patching
+if [ ! -z "$PATCH" ]; then patch checkServerTrusted; fi;
+#Rebuild patched APK
+if [ ! -z "$REC" ]; then recompile; fi
+if [ -f ${PATCHED_APK} ]; then
+	# Sign new APK
+	signAPK;
+	# Getting JAR from source, mostly to check up if everything's went fine
+	decToJar;
+fi
+if [ ! -z ${DESTINATION} ]; then installAPK; fi;
+
+echo -e "###################################"
+echo "Enjoy!"
