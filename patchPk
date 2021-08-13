@@ -1,0 +1,36 @@
+#!/bin/bash
+APPS_PATH="$(dirname $0)/apps"
+APKS_PATH="$(dirname $0)/apks"
+BACKUPS_PATH="$(dirname $0)/backups"
+TOOLS_PATH="$(dirname $0)/tools"
+SH_TOOLS="$TOOLS_PATH/sh"
+JS_TOOLS="$TOOLS_PATH/js"
+source ${SH_TOOLS}/utils.sh
+clear
+[[ $# -eq 0 ]] && displayUsage; 
+echo "APK reversing + bypass injection - $(date)"
+echo -e " ______   ______     ______   ______     __  __     ______   __  __    
+/\  == \ /\  __ \   /\__  _\ /\  ___\   /\ \_\ \   /\  == \ /\ \/ /    
+\ \  _-/ \ \  __ \  \/_/\ \/ \ \ \____  \ \  __ \  \ \  _-/ \ \  _-.  
+ \ \_\    \ \_\ \_\    \ \_\  \ \_____\  \ \_\ \_\  \ \_\    \ \_\ \_\ 
+  \/_/     \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/     \/_/\/_/ 
+                                                                       "
+# App/tools config
+source ${SH_TOOLS}/conf.sh
+# Load APK
+source ${SH_TOOLS}/loader.sh
+# Decompile, recompile APK
+source ${SH_TOOLS}/decrec.sh
+# SMALI Code injecting
+source ${SH_TOOLS}/injecter.sh
+
+# Get apk from chosen source
+[ ! -z $SOURCE ] && dlAPK; 
+# Decompile source's APK
+[ ! -z $DEC ] && decToSMALI && decToJAR; 
+# Recompile source's APK
+[ ! -z $REC ] && recAPKFromSMALI; 
+# Install APK if device specified
+[ ! -z $ADB_DESTINATION_DEVICE ] && installAPK; 
+echo -e "###################################"
+echo "Enjoy!"
