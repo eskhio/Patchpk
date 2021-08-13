@@ -9,7 +9,7 @@ APK_TOOL_PATH=${TOOLS_PATH}/utils/apktool/apktool
 # dex2jar
 D2J="${TOOLS_PATH}/utils/dex2jar-2.0/d2j-dex2jar.sh"
 # Android APK signer
-ANDROID_SDK='28.0.3'
+ANDROID_SDK='31.0.0'
 APK_SIGN="${HOME}/Library/Android/sdk/build-tools/${ANDROID_SDK}/apksigner sign"
 JKS_PATH="${TOOLS_PATH}/utils/sign/fake.jks"
 JKS_PASSWORD='azerty123'
